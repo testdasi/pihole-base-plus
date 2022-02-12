@@ -17,13 +17,13 @@ mkdir -p /etc/stubby \
 if [[ ${TARGETPLATFORM} =~ "arm" ]]
 then 
     cd /tmp \
-    && wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm.deb \
+    && curl -OL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm.deb \
     && apt install ./cloudflared-linux-arm.deb \
     && rm -f ./cloudflared-linux-arm.deb \
     && echo "Cloudflared installed for arm due to tag ${TAG}"
 else 
     cd /tmp \
-    && wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb \
+    && curl -OL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb \
     && apt install ./cloudflared-linux-amd64.deb \
     && rm -f ./cloudflared-linux-amd64.deb \
     && echo "Cloudflared installed for amd64 due to tag ${TAG}"

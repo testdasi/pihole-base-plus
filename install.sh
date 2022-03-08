@@ -25,8 +25,14 @@ then
 elif [[ ${TARGETPLATFORM} =~ "386" ]]
 then
     curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-386.deb -o /tmp/cloudflared.deb
-else 
+elif [[ ${TARGETPLATFORM} =~ "arm/v7" ]]
+then
     curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm.deb -o /tmp/cloudflared.deb
+#elif [[ ${TARGETPLATFORM} =~ "arm/v6" ]]
+#then
+#    curl -sL https://hobin.ca/cloudflared/releases/2022.3.1/cloudflared_2022.3.1_arm.deb -o /tmp/cloudflared.deb
+else 
+    echo "$(date "+%d.%m.%Y %T") CRITICAL - Invalid platform build" >> /build.info
 fi
 apt install ./cloudflared.deb \
     && rm -f ./cloudflared.deb \

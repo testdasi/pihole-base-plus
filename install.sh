@@ -25,10 +25,10 @@ then
 elif [[ ${TARGETPLATFORM} =~ "386" ]]
 then
     curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-386.deb -o /tmp/cloudflared.deb
-elif [[ ${TARGETPLATFORM} =~ "arm/v7" ]]
+elif [[ ${TARGETPLATFORM} =~ 'arm/v7' ]]
 then
     curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm.deb -o /tmp/cloudflared.deb
-#elif [[ ${TARGETPLATFORM} =~ "arm/v6" ]]
+#elif [[ ${TARGETPLATFORM} =~ 'arm/v6' ]]
 #then
 #    curl -sL https://hobin.ca/cloudflared/releases/2022.3.1/cloudflared_2022.3.1_arm.deb -o /tmp/cloudflared.deb
 else 

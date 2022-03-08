@@ -3,7 +3,7 @@
 # install basic packages
 apt-get -y update \
     && apt-get -y dist-upgrade \
-    && apt-get -y install sudo bash nano
+    && apt-get -y install sudo bash nano curl
     
 # install stubby
 apt-get -y update \
@@ -14,23 +14,26 @@ mkdir -p /etc/stubby \
     && rm -f /etc/stubby/stubby.yml
 
 # install cloudflared
-if [[ ${TARGETPLATFORM} =~ "arm" ]]
+mkdir -p /tmp \
+    && cd /tmp
+if [[ ${TARGETPLATFORM} =~ "arm64" ]]
+then
+    curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb -o /tmp/cloudflared.deb
+elif [[ ${TARGETPLATFORM} =~ "amd64" ]]
 then 
-    cd /tmp \
-    && curl -OL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm.deb \
-    && apt install ./cloudflared-linux-arm.deb \
-    && rm -f ./cloudflared-linux-arm.deb \
-    && echo "Cloudflared installed for arm due to tag ${TAG}"
+    curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o /tmp/cloudflared.deb
+elif [[ ${TARGETPLATFORM} =~ "386" ]]
+then
+    curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-386.deb -o /tmp/cloudflared.deb
 else 
-    cd /tmp \
-    && curl -OL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb \
-    && apt install ./cloudflared-linux-amd64.deb \
-    && rm -f ./cloudflared-linux-amd64.deb \
-    && echo "Cloudflared installed for amd64 due to tag ${TAG}"
+    curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm.deb -o /tmp/cloudflared.deb
 fi
-useradd -s /usr/sbin/nologin -r -M cloudflared \
-    && chown cloudflared:cloudflared /usr/local/bin/cloudflared
-    
+apt install ./cloudflared.deb \
+    && rm -f ./cloudflared.deb \
+    && useradd -s /usr/sbin/nologin -r -M cloudflared \
+    && chown cloudflared:cloudflared /usr/local/bin/cloudflared \
+    && echo "$(date "+%d.%m.%Y %T") Added cloudflared for ${TARGETPLATFORM}" >> /build.info
+
 # clean cloudflared config
 mkdir -p /etc/cloudflared \
     && rm -f /etc/cloudflared/config.yml

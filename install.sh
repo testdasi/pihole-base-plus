@@ -3,7 +3,7 @@
 # install basic packages
 apt-get -y update \
     && apt-get -y dist-upgrade \
-    && apt-get -y install sudo bash nano curl
+    && apt-get -y install sudo bash nano curl tar
     
 # install stubby
 apt-get -y update \
